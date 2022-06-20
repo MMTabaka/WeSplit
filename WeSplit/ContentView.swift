@@ -13,7 +13,7 @@ struct ContentView: View {
     @State private var tipPercentage: Int = 20
     @FocusState private var amountIsFocused: Bool
     
-    let tipPercentages = [10, 15, 20, 25, 0]
+    let currency: FloatingPointFormatStyle<Double>.Currency = .currency(code: Locale.current.currencyCode ?? "USD")
     
     var totalPerPerson: Double {
         let peopleCount = Double(numberOfPeople + 2)
@@ -30,7 +30,7 @@ struct ContentView: View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currencyCode ?? "USD"))
+                    TextField("Amount", value: $checkAmount, format: currency)
                         .keyboardType(.decimalPad)
                         .focused($amountIsFocused)
                     
@@ -43,17 +43,24 @@ struct ContentView: View {
                 
                 Section {
                     Picker("Tip percentage", selection: $tipPercentage) {
-                        ForEach(tipPercentages, id: \.self) {
+                        ForEach(0..<101) {
                             Text($0, format: .percent)
                         }
                     }
-                    .pickerStyle(.segmented)
                 } header: {
                     Text("How much tip do you want to leave?")
                 }
                 
                 Section {
-                    Text(totalPerPerson, format: .currency(code: Locale.current.currencyCode ?? "USD"))
+                    Text(totalPerPerson, format: currency)
+                } header: {
+                    Text("Amount per person")
+                }
+                
+                Section {
+                    Text(totalPerPerson * Double(numberOfPeople + 2), format: currency)
+                } header: {
+                    Text("Total to pay")
                 }
             }
             .navigationTitle("WeSplit")
@@ -62,6 +69,7 @@ struct ContentView: View {
                     Spacer()
                     Button("Done") {
                         amountIsFocused = false
+                        print(amountIsFocused)
                     }
                 }
             }
