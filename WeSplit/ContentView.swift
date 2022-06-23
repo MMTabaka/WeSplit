@@ -52,16 +52,16 @@ struct ContentView: View {
                 }
                 
                 Section {
-                    Text(totalPerPerson, format: currency)
-                } header: {
-                    Text("Amount per person")
-                }
-                
-                Section {
                     Text(totalPerPerson * Double(numberOfPeople + 2), format: currency)
                         .foregroundColor(tipPercentage == 0 ? .red : .primary)
                 } header: {
-                    Text("Total to pay")
+                    Text("Total amount to pay")
+                }
+                
+                Section {
+                    Text(totalPerPerson, format: currency)
+                } header: {
+                    Text("Amount per person")
                 }
             }
             .navigationTitle("WeSplit")
